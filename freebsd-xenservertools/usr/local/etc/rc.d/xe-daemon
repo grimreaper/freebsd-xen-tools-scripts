@@ -24,7 +24,7 @@ start_precmd="xe_daemon_startprecmd"
 load_rc_config $name
 
 pidfile="/var/run/xe_wrapper.pid"
-xe_daemon_enable=${xe_daemon_enable:-"NO"}
+: ${xe_daemon_enable="NO"}
 
 xe_daemon_startprecmd()
 {
