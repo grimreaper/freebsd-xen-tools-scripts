@@ -1,0 +1,70 @@
+#!/bin/sh
+
+
+# Script to write information about the current distribution to stdout or a file.
+# Information collected:
+#   - Distribution name
+#   - Distribution version (major and minor)
+#   - Kernel version (uname)
+
+LANG="C"
+export LANG
+
+write_to_output()
+{
+    local distro="$1"
+    local major="$2"
+    local minor="$3"
+    local name="$4"
+    local uname=$(uname -r)
+
+    if [ -n "${TEST_RESULT}" ] ; then
+	MAJOR=$major
+	MINOR=$minor
+	DISTRO=$distro
+	UNAME=$uname
+	return 0
+    fi
+
+    echo "os_distro=\"${distro}\""
+    echo "os_majorver=\"${major}\""
+    echo "os_minorver=\"${minor}\""
+    echo "os_uname=\"${uname}\""
+    echo "os_name=\"${name}\""
+
+    return 0
+}
+
+identify_freebsd()
+{
+    local freebsd_version="$1"
+    local major
+    local minor
+
+    if [ ! -f "${freebsd_version}" ] ; then
+	return 1
+    fi
+
+    eval $(awk -F. '/^(([0-9]{1,2}(\.){1}[0-9]{1,2}(-){1}){1})((20[0-9]{6}-{1}SNAP$)?(RELEASE(-p[0-9]{1})?$)?(PRERELEASE(-p[0-9]{1})?$)?){1}/ \
+                        { print "major="$1 ; print "minor="$2 ; exit 0 }' \
+                       "${freebsd_version}")
+
+    write_to_output "FreeBSD" "${major}" "${minor}" "FreeBSD $(head -n 1 $freebsd_version)"
+
+    return 0
+}
+
+
+if [ $# -eq 1 ] ; then
+    exec 1>"$1"
+fi
+
+if [ -z "${TEST}" ] ; then
+	identify_freebsd /etc/freebsd-version && exit 0
+
+    if [ $# -eq 1 ] ; then
+	rm -f "$1"
+    fi
+
+    exit 1
+fi
