@@ -1,6 +1,6 @@
 #!/bin/sh
 
-interfaces=$(/sbin/ifconfig | grep '<UP,' | grep ': flags=' | grep -v 'plip' | grep -v 'ipfw' | grep -v 'lo0' | cut -d ':' -f1)
+interfaces=$(/sbin/ifconfig -u | grep ': flags=' | grep -Ev '(plip|ipfw|lo0)' | cut -d ':' -f1)
 
 
 for if in $interfaces ; do
