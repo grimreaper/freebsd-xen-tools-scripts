@@ -123,8 +123,7 @@ xenstore_list_interfaces_cached() {
 
 if [ $MEMORY_MODE -eq 1 ] ; then
     # Update the memory information
-    /usr/local/sbin/xe-meminfo.sh > /usr/local/xen/meminfo
-    eval $(cat /usr/local/xen/meminfo | \
+    eval $(/usr/local/sbin/xe-meminfo.sh | \
 	sed -n -e 's/MemTotal\: *\([0-9]*\)[^$]*/memtotal=\1/gp;' \
         -e 's/MemFree\: *\([0-9]*\)[^$]*/memfree=\1/gp;')
     
@@ -132,14 +131,12 @@ if [ $MEMORY_MODE -eq 1 ] ; then
     xenstore_write_cached "data/meminfo_free" "${memfree}"
 fi
 
-/usr/local/sbin/xe-ip-if.sh > /usr/local/xen/fichero-ip-if
-
 while read linea
 do
   if=$(echo $linea | cut -d '|' -f1 | sed 's/ //g')
   inet=$(echo $linea | cut -d '|' -f2 | sed 's/ //g')
   xenstore_write_cached "attr/${if}/ip" "${inet}" 
-done < /usr/local/xen/fichero-ip-if
+done < $(/usr/local/sbin/xe-ip-if.sh)
 
 # remove any interfaces that have been unplugged or downed
 for at in $(xenstore_list_interfaces_cached) ; do
@@ -148,7 +145,7 @@ for at in $(xenstore_list_interfaces_cached) ; do
 	do
 	  if=$(echo $linea | cut -d '|' -f1 | sed 's/ //g')
 	  [ "${if}" = "${at}" ] && borrar=0 && break
-	done < /usr/local/xen/fichero-ip-if
+	done < $(/usr/local/sbin/xe-ip-if.sh)
 	
 	if [ "$borrar" -gt "0" ] ; then
 	xenstore_rm_cached "attr/${at}"

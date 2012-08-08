@@ -15,5 +15,5 @@ memoria_MB_libres=$(echo "$memoria_MB_total_que_dispone - $memoria_MB_usados" | 
 memoria_KB_libres=$(echo "$memoria_MB_libres * 1024" | bc)
 memoria_KB_total_que_dispone=$(echo "$memoria_MB_total_que_dispone * 1024" | bc)
 
-echo "MemTotal:      $memoria_KB_total_que_dispone kB" > /usr/local/xen/meminfo
-echo "MemFree:       $memoria_KB_libres kB" >> /usr/local/xen/meminfo
+echo "MemTotal:      $memoria_KB_total_que_dispone kB"
+echo "MemFree:       $memoria_KB_libres kB"

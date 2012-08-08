@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/sh
 
 interfaces=$(/sbin/ifconfig | grep '<UP,' | grep ': flags=' | grep -v 'plip' | grep -v 'ipfw' | grep -v 'lo0' | cut -d ':' -f1)
 
