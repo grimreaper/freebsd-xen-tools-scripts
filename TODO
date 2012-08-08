@@ -1,0 +1,3 @@
+- Remove as much BASH as possible.
+- Make it worthy of inclusion in xen-tools port
+- Can we stop storing memory/interface values in files and read them on demand?
