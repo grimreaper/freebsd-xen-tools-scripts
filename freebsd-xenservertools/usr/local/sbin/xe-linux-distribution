@@ -60,7 +60,7 @@ if [ $# -eq 1 ] ; then
 fi
 
 if [ -z "${TEST}" ] ; then
-	identify_freebsd /etc/freebsd-version && exit 0
+	identify_freebsd /usr/local/etc/freebsd-version && exit 0
 
     if [ $# -eq 1 ] ; then
 	rm -f "$1"

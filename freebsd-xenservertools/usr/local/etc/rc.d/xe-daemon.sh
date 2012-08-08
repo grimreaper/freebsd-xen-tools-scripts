@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 #
-## SCRIPT QUE ARRANCA LAS COMPROBACIONES PERIODICAS DE CAMBIOS DE ATRIBUTOS Y SU REFRESCO... ADEMAS TAMBIEN POR CAMBIO DE DOMU-ID
+## SCRIPT TO START PERIODIC CHECKS AND EXCHANGE DOMU-ID
 
 LANG="C"
 export LANG
@@ -20,9 +20,9 @@ action()
     return $ret
 }
 
-XE_LINUX_DISTRIBUTION=/usr/sbin/xe-linux-distribution
+XE_LINUX_DISTRIBUTION=/usr/local/sbin/xe-linux-distribution
 XE_LINUX_DISTRIBUTION_CACHE=/var/cache/xe-linux-distribution
-XE_DAEMON=/usr/sbin/xe-daemon
+XE_DAEMON=/usr/local/sbin/xe-daemon
 XE_DAEMON_PIDFILE=/var/run/xe-daemon.pid
 
 if [ ! -x "${XE_LINUX_DISTRIBUTION}" ] ; then
