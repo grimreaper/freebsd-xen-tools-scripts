@@ -19,8 +19,9 @@ rcvar=`set_rcvar`
 xe_daemon_enable=${xe_daemon_enable:-"NO"}
 pidfile=/var/run/${name}.pid
 
-command=/usr/local/sbin/xe-daemon
-command_args="-p ${pidfile}"
+command=/usr/local/sbin/xe_wrapper
+command_interpreter="/bin/sh -T"
+command_args="/usr/local/sbin/xe-daemon &"
 start_precmd="xe_daemon_startprecmd"
 
 xe_daemon_startprecmd()
