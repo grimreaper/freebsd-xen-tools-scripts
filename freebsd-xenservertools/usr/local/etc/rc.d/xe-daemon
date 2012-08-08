@@ -13,16 +13,18 @@
 
 . /etc/rc.subr
 
-name="xe_daemon"
-rcvar=`set_rcvar`
-
-xe_daemon_enable=${xe_daemon_enable:-"NO"}
-pidfile=/var/run/${name}.pid
+name=xe_daemon
+rcvar=xe_daemon_enable
 
 command=/usr/local/sbin/xe_wrapper
 command_interpreter="/bin/sh -T"
 command_args="/usr/local/sbin/xe-daemon &"
 start_precmd="xe_daemon_startprecmd"
+
+load_rc_config $name
+
+pidfile="/var/run/xe_wrapper.pid"
+xe_daemon_enable=${xe_daemon_enable:-"NO"}
 
 xe_daemon_startprecmd()
 {
