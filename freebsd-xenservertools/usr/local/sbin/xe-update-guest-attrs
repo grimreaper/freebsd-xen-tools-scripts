@@ -169,8 +169,8 @@ fi
 xenstore_write_cached "control/feature-balloon" "1"
 
 # build time addons
-xenstore_write_cached "attr/PVAddons/MajorVersion" "1"
-xenstore_write_cached "attr/PVAddons/MinorVersion" "1"
+xenstore_write_cached "attr/PVAddons/MajorVersion" "6"
+xenstore_write_cached "attr/PVAddons/MinorVersion" "0"
 xenstore_write_cached "attr/PVAddons/MicroVersion" "0" 
 xenstore_write_cached "attr/PVAddons/BuildVersion" "47383"
 xenstore_write_cached "attr/PVAddons/Installed" "1" 
