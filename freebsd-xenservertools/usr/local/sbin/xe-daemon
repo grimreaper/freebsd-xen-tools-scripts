@@ -29,7 +29,7 @@ while [ $# -ne 0 ] ; do
     esac
 done
 
-XE_UPDATE_GUEST_ATTRS=${XE_UPDATE_GUEST_ATTRS:-/usr/sbin/xe-update-guest-attrs}
+XE_UPDATE_GUEST_ATTRS=${XE_UPDATE_GUEST_ATTRS:-/usr/local/sbin/xe-update-guest-attrs}
 XE_DAEMON_RATE=${XE_DAEMON_RATE:-60}                    # run once a minute by default
 XE_MEMORY_UPDATE_DIVISOR=${XE_MEMORY_UPDATE_DIVISOR:-2}  # update mem stats 1/2 as often by dflt
 

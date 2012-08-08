@@ -15,5 +15,5 @@ memoria_MB_libres=$(echo "$memoria_MB_total_que_dispone - $memoria_MB_usados" | 
 memoria_KB_libres=$(echo "$memoria_MB_libres * 1024" | bc)
 memoria_KB_total_que_dispone=$(echo "$memoria_MB_total_que_dispone * 1024" | bc)
 
-echo "MemTotal:      $memoria_KB_total_que_dispone kB" > /procfalse/meminfo
-echo "MemFree:       $memoria_KB_libres kB" >> /procfalse/meminfo
+echo "MemTotal:      $memoria_KB_total_que_dispone kB" > /usr/local/procfalse/meminfo
+echo "MemFree:       $memoria_KB_libres kB" >> /usr/local/procfalse/meminfo
