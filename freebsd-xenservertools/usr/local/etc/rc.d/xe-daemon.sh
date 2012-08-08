@@ -36,6 +36,7 @@ start()
 
     action $"Starting xe daemon: " /usr/bin/true
     mkdir -p $(dirname ${XE_DAEMON_PIDFILE})
+    uname -r > /usr/local/xen/freebsd-version
     # This is equivalent to daemon() in C
     ( exec &>/dev/null ; ${XE_DAEMON} -p ${XE_DAEMON_PIDFILE} & )
 }
