@@ -1,37 +1,8 @@
-#!/usr/local/bin/bash
+#!/bin/sh
 
-## SCRIPT QUE GESTIONA ACTUALIZACIONES DE MEMORIA EN MAQUINA Y EN BBDD DE XENSTORE...
-## SE LE LLAMA DESDE XE-LINUX-DISTRIBUTION DEL INIT
-
-LANG="C"
-export LANG
-
-usage() {
-    echo "$0 [ -p <pidfile> ]" >&2
-    exit 1
-}
-
-# Parse command line opts
-while [ $# -ne 0 ] ; do
-    arg="$1"
-    shift
-    case "$arg" in
-        "-p")
-            [ $# -eq 0 ] && usage
-            pidfile="$1"
-            shift
-            mkdir -p "$(dirname "$pidfile")"
-            echo $$ > "$pidfile"
-            ;;
-        *)
-            usage
-            ;;
-    esac
-done
-
-XE_UPDATE_GUEST_ATTRS=${XE_UPDATE_GUEST_ATTRS:-/usr/local/sbin/xe-update-guest-attrs}
-XE_DAEMON_RATE=${XE_DAEMON_RATE:-60}                    # run once a minute by default
-XE_MEMORY_UPDATE_DIVISOR=${XE_MEMORY_UPDATE_DIVISOR:-2}  # update mem stats 1/2 as often by dflt
+XE_UPDATE_GUEST_ATTRS=/usr/local/sbin/xe-update-guest-attrs
+XE_DAEMON_RATE=60                    # run once a minute by default
+XE_MEMORY_UPDATE_DIVISOR=2  # update mem stats 1/2 as often by dflt
 
 # Delete xenstore cache following each reboot
 rm -rf /var/cache/xenstore
