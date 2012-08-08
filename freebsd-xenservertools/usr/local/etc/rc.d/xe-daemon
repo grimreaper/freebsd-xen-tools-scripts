@@ -1,67 +1,38 @@
-#!/usr/local/bin/bash
+#!/bin/sh
+
+# PROVIDE: xe_daemon
+# REQUIRE: login
+# KEYWORD: nojail shutdown
 #
-## SCRIPT TO START PERIODIC CHECKS AND EXCHANGE DOMU-ID
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# xe_daemon_enable (bool): Set to NO by default.
+#       Set it to YES to enable xe_daemon.
+#
 
-LANG="C"
-export LANG
+. /etc/rc.subr
 
-action()
+name="xe_daemon"
+rcvar=`set_rcvar`
+
+xe_daemon_enable=${xe_daemon_enable:-"NO"}
+pidfile=/var/run/${name}.pid
+
+command=/usr/local/sbin/xe-daemon
+command_args="-p ${pidfile}"
+start_precmd="xe_daemon_startprecmd"
+
+xe_daemon_startprecmd()
 {
-    descr=$1 ; shift
-    cmd=$@
-    echo -n "$descr "
-    $cmd
-    ret=$?
-    if [ $ret -eq 0 ] ; then
-	echo "OK"
-    else
-	echo "Failed"
-    fi
-    return $ret
+# seed the xe-linux-distribution cache file for Xen
+cat > /var/cache/xe-linux-distribution <<FOO
+os_distro="`uname -s`"
+os_majorver=""
+os_minorver=""
+os_uname="`uname -r`"
+os_name="`uname -s` `uname -r`"
+FOO
 }
 
-XE_LINUX_DISTRIBUTION=/usr/local/sbin/xe-linux-distribution
-XE_LINUX_DISTRIBUTION_CACHE=/var/cache/xe-linux-distribution
-XE_DAEMON=/usr/local/sbin/xe-daemon
-XE_DAEMON_PIDFILE=/var/run/xe-daemon.pid
-
-if [ ! -x "${XE_LINUX_DISTRIBUTION}" ] ; then
-    exit 0
-fi
-
-start()
-{
-    uname -r > /usr/local/xen/freebsd-version
-    action $"Detecting Operating system:" \
-	${XE_LINUX_DISTRIBUTION} ${XE_LINUX_DISTRIBUTION_CACHE}
-
-    action $"Starting xe daemon: " /usr/bin/true
-    mkdir -p $(dirname ${XE_DAEMON_PIDFILE})
-    # This is equivalent to daemon() in C
-    ( exec &>/dev/null ; ${XE_DAEMON} -p ${XE_DAEMON_PIDFILE} & )
-}
-
-stop()
-{
-    action $"Stopping xe daemon: "   kill -TERM $(cat ${XE_DAEMON_PIDFILE})
-}
-
-case "$1" in
-  start)
-        start
-        ;;
-  stop)
-	stop
-	;;
-  force-reload|restart)
-	stop
-	start
-	;;
-  *)
-        # do not advertise unreasonable commands that there is no reason
-        # to use with this device
-        echo $"Usage: $0 start|restart"
-        exit 1
-esac
-
-exit $?
+run_rc_command "$1"
